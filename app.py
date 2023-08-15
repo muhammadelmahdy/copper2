@@ -2,7 +2,7 @@ import streamlit as st
 import tensorflow as tf
 import pandas as pd
 import numpy as np
-
+from tensorflow.keras.layers import Dense, LSTM, Dropout
 
 
 def predict(arr,model):
@@ -23,7 +23,18 @@ def predict(arr,model):
 
 def main():
   # Load the pre-trained TensorFlow model
-  model = tf.keras.models.load_model('model.json')
+  
+  model2 = Sequential()
+  model2.add(LSTM(64, input_shape=(1,X.shape[1])))
+  model2.add(tf.keras.layers.Reshape((1,64,), input_shape=(None,64)))
+  model2.add(LSTM(32, input_shape=(1,X.shape[1])))
+  model2.add(Dropout(0.2))
+  model2.add(Dense(4))
+  model2.add(Dropout(0.2))
+  model2.add(Dense(1))
+  model2.compile(loss = 'mean_squared_error', optimizer = 'Adam',metrics=[RootMeanSquaredError()])
+  model2.load_weights('weights.h5')
+
 
   st.title('Stock Price Prediction App')
 
@@ -35,7 +46,7 @@ def main():
   low_price = st.number_input("Low Price")
 
   arr=np.array([date,open_price,high_price,low_price])
-  preds=predict(arr)
+  preds=predict(arr,model2)
 
 
   st.write("Predicted Close Price:", preds[0][0])
