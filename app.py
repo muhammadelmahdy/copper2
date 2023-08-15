@@ -27,9 +27,9 @@ def main():
   # Load the pre-trained TensorFlow model
   
   model2 = Sequential()
-  model2.add(LSTM(64, input_shape=(1,X.shape[1])))
+  model2.add(LSTM(64, input_shape=(1,4)))
   model2.add(tf.keras.layers.Reshape((1,64,), input_shape=(None,64)))
-  model2.add(LSTM(32, input_shape=(1,X.shape[1])))
+  model2.add(LSTM(32, input_shape=(1,4)))
   model2.add(Dropout(0.2))
   model2.add(Dense(4))
   model2.add(Dropout(0.2))
